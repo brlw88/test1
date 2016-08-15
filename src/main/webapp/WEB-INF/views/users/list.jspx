@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+     xmlns:c="http://java.sun.com/jsp/jstl/core"
+     xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+     xmlns:spring="http://www.springframework.org/tags"
+     version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+
+    <spring:message code="label.user.list.h1" var="labelUserListH1"/>
+    <spring:message code="label.user.list.search" var="labelUserListSearch"/>
+    <spring:message code="label.user.list.th.id" var="labelUserListTHId"/>
+    <spring:message code="label.user.list.th.name" var="labelUserListTHName"/>
+    <spring:message code="label.user.list.th.age" var="labelUserListTHAge"/>
+    <spring:message code="label.user.list.th.isadmin" var="labelUserListTHisAdmin"/>
+    <spring:message code="label.user.list.th.created" var="labelUserListTHCreated"/>
+
+    <spring:url value="/users" var="showUserUrl"/>
+    <spring:url value="/users/search" var="searchUrl" />
+
+    <spring:url value="/users" var="firstPageUrl" >
+        <spring:param name="page" value="1" />
+        <c:if test="${not empty search_str}">
+            <spring:param name="search" value="${search_str}" />
+        </c:if>
+    </spring:url>
+    <spring:url value="/users" var="lastPageUrl" >
+        <spring:param name="page" value="${totalPages}" />
+        <c:if test="${not empty search_str}">
+            <spring:param name="search" value="${search_str}" />
+        </c:if>
+    </spring:url>
+    <spring:url value="/users" var="prevPageUrl" >
+        <spring:param name="page" value="${currentIndex - 1}" />
+        <c:if test="${not empty search_str}">
+            <spring:param name="search" value="${search_str}" />
+        </c:if>
+    </spring:url>
+    <spring:url value="/users" var="nextPageUrl" >
+        <spring:param name="page" value="${currentIndex + 1}" />
+        <c:if test="${not empty search_str}">
+            <spring:param name="search" value="${search_str}" />
+        </c:if>
+    </spring:url>
+
+    <h1>${labelUserListH1}</h1>
+
+    <c:if test="${not empty message}">
+        <div id="message" class="${message.type}">${message.message}</div>
+    </c:if>
+
+    <c:if test="${not empty users}">
+        <div id="searchPane">
+            <form id="searchForm" method="post" action="${searchUrl}">
+                <input name="search_str" value="${not empty search_str ? search_str : ''}" />&#160;
+                <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                    <span class="ui-button-text">${labelUserListSearch}</span>
+                </button>
+            </form>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>${labelUserListTHId}</th>
+                    <th>${labelUserListTHName}</th>
+                    <th>${labelUserListTHAge}</th>
+                    <th>${labelUserListTHisAdmin}</th>
+                    <th>${labelUserListTHCreated}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach items="${users}" var="user">
+                    <tr>
+                        <td>${user.id}</td>
+                        <td><a href="${showUserUrl}/${user.id}">${user.name}</a></td>
+                        <td>${user.age}</td>
+                        <td>
+                            <c:choose>
+                            <c:when test="${user.isAdmin}"><input type="checkbox" checked="checked" onclick="return false" /></c:when>
+                            <c:otherwise><input type="checkbox" onclick="return false" /></c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td><fmt:formatDate value="${user.createdDate}" pattern="dd.MM.yyyy HH:mm:ss" /></td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+
+        <div id="pagerPane">
+            <table id="pager"><tr>
+                <c:choose>
+                    <c:when test="${currentIndex == 1}" >
+                        <td>&lt;&lt;</td>
+                        <td>&lt;</td>
+                    </c:when>
+                    <c:otherwise>
+                        <td><a href="${firstPageUrl}">&lt;&lt;</a></td>
+                        <td><a href="${prevPageUrl}">&lt;</a></td>
+                    </c:otherwise>
+                </c:choose>
+                <c:forEach var="i" begin="${beginIndex}" end="${endIndex}">
+                    <spring:url value="/users" var="pageUrl" >
+                        <spring:param name="page" value="${i}" />
+                        <c:if test="${not empty search_str}">
+                            <spring:param name="search" value="${search_str}" />
+                        </c:if>
+                    </spring:url>
+                    <c:choose>
+                        <c:when test="${i == currentIndex}" >
+                            <td><b><c:out value="${i}" /></b></td>
+                        </c:when>
+                        <c:otherwise>
+                            <td><a href="${pageUrl}"><c:out value="${i}" /></a></td>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+                <c:choose>
+                    <c:when test="${currentIndex == totalPages}" >
+                        <td>&gt;</td>
+                        <td>&gt;&gt;</td>
+                    </c:when>
+                    <c:otherwise>
+                        <td><a href="${nextPageUrl}">&gt;</a></td>
+                        <td><a href="${lastPageUrl}">&gt;&gt;</a></td>
+                    </c:otherwise>
+                </c:choose>
+            </tr></table>
+        </div>
+    </c:if>
+</div>

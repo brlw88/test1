@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+     xmlns:c="http://java.sun.com/jsp/jstl/core"
+     xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+     xmlns:spring="http://www.springframework.org/tags"
+     xmlns:form="http://www.springframework.org/tags/form"
+     version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+
+    <spring:message code="label.homepage.h1" var="labelHomepageH1"/>
+
+    <h1>${labelHomepageH1}</h1>
+
+    <h2>Описание задания</h2>
+    <p>Есть одна таблица User.</p>
+    <p>Необходимо реализовать стандартное crud приложение, которое отображаем список всех юзеров в базе (с пейджингом).
+    С возможностью их удаления, редактирования, добавления новых. И поиска по уже существующим.</p>
+
+    <h2>Описание реализации</h2>
+    <p>Использованы следующие технологии:</p>
+    <ul>
+        <li>Java 8 (OpenJDK)</li>
+        <li>Tomcat 8.5</li>
+        <li>MySQL 5</li>
+        <li>Spring 4</li>
+        <li>Hibernate 5</li>
+        <li>Spring MVC</li>
+        <li>Spring Data</li>
+        <li>Log4j</li>
+        <li>Apache Tiles</li>
+        <li>Maven</li>
+    </ul>
+    <p>Скрипт создания таблицы БД находится в файле <b>WEB-INF/classes/META-INF/sql/load-data.sql</b>.</p>
+    <p>Для корректной загрузки в таблицу данных в кодировке UTF-8, следует указать необходимость использования данной кодировки при загрузке, например, так:</p>
+    <pre>mysql -u root -p --default-character-set=utf8</pre>
+    <p>Параметры подключения к базе данных находятся в файле <b>WEB-INF/classes/database.properties</b>, база данных <b>test</b>, пользователь <b>root</b>, пароль <b>root</b>.</p>
+    <p>Лог-файл программы находится в файле <b>[каталог_tomcat]/logs/test1.log</b>.</p>
+    <p>Настроен автоматический деплой приложения на Tomcat Server с помощью <b>cargo-maven2-plugin</b>, параметры подключения к серверу задаются в файле <b>pom.xml</b>.
+    Необходимые для сборки и деплоя команды:</p>
+    <pre>mvn clean package cargo:undeploy cargo:deploy</pre>
+    <p>Реализован простой JUnit-тест, проверяющий работоспособность операций создания, редактирования и удаления записей, а также наличие поддержки UTF-8.</p>
+    <p>Дополнительно к заданию реализованы:</p>
+    <ul>
+        <li>Интернационализация с поддержкой двух локалей и их переключения (на всех страницах, кроме домашней)</li>
+        <li>Поддержка шаблонов Apache Tiles</li>
+        <li>Поддержка тем оформления</li>
+        <li>Поддержка проверки правильности введенных данных</li>
+    </ul>
+</div>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+     xmlns:c="http://java.sun.com/jsp/jstl/core"
+     xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+     xmlns:spring="http://www.springframework.org/tags"
+     xmlns:form="http://www.springframework.org/tags/form"
+     version="2.0">
+
+    <jsp:directive.page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+
+    <spring:message code="label.user.new.h1" var="labelUserNewH1"/>
+    <spring:message code="label.user.update.h1" var="labelUserUpdateH1"/>
+    <spring:message code="label.user.show.id" var="labelUserShowId"/>
+    <spring:message code="label.user.show.name" var="labelUserShowName"/>
+    <spring:message code="label.user.show.age" var="labelUserShowAge"/>
+    <spring:message code="label.user.show.isadmin" var="labelUserShowIsAdmin"/>
+    <spring:message code="label.user.show.created" var="labelUserShowCreated"/>
+    <spring:message code="label.user.edit.save" var="labelUserEditSave"/>
+    <spring:message code="label.user.edit.reset" var="labelUserEditReset"/>
+    <spring:message code="label.user.edit.confirm" var="labelUserEditConfirm"/>
+
+    <spring:eval expression="user.id == 0 ? labelUserNewH1 : labelUserUpdateH1"
+                 var="formTitle"/>
+
+    <spring:url value="/users/save" var="submitUrl" />
+
+    <h1>${formTitle}</h1>
+
+    <div id="userUpdate">
+        <form:form modelAttribute="user" id="userUpdateForm" method="post" action="${submitUrl}">
+
+            <c:if test="${not empty message}">
+                <div id="message" class="${message.type}">${message.message}</div>
+            </c:if>
+
+            <c:if test="${user.id != 0}">
+                <form:label path="id">
+                    ${labelUserShowId}
+                </form:label>
+                <form:input path="id" readonly="true" />
+                <p/>
+            </c:if>
+
+            <form:label path="name">
+                ${labelUserShowName}
+            </form:label>
+            <form:input path="name" />
+            <div>
+                <form:errors path="name" cssClass="error" />
+            </div>
+            <p/>
+
+            <form:label path="age">
+                ${labelUserShowAge}
+            </form:label>
+            <form:input path="age" />
+            <div>
+                <form:errors path="age" cssClass="error" />
+            </div>
+            <p/>
+
+            <form:label path="isAdmin">
+                ${labelUserShowIsAdmin}
+            </form:label>
+            <form:checkbox path="isAdmin" />
+            <div>
+                <form:errors path="isAdmin" cssClass="error" />
+            </div>
+            <p/>
+
+            <form:label path="createdDate">
+                ${labelUserShowCreated}
+            </form:label>
+            <form:input path="createdDate" readonly="true" />
+            <p/>
+
+            <form:hidden path="version" />
+
+            <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="return confirm('${labelUserEditConfirm}');">
+                <span class="ui-button-text">${labelUserEditSave}</span>
+            </button>
+            <button type="reset" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="margin-left: 10px;" >
+                <span class="ui-button-text">${labelUserEditReset}</span>
+            </button>
+        </form:form>
+    </div>
+</div>
